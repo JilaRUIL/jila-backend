@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get 'sync/entries' => 'sync#entries'  
     get 'sync/image_credits' => 'sync#image_credits'
     get 'sync/all' => 'sync#all'  
+    get 'sync/single_category/:id' => 'sync#single_category'  
     get 'heartbeat' => 'heartbeat#heartbeat'
   end
   

@@ -1,5 +1,8 @@
 ActiveAdmin.register Entry do
 
+  csv_importable :columns => [:entry_word, :word_type, :translation, :scientific_name, :sentence, :sentence_translation],
+                              :import_unique_key => :code
+
   controller do
     cache_sweeper :api_sweeper
 
@@ -18,20 +21,26 @@ ActiveAdmin.register Entry do
 
   actions :all, except: [:show]
 
-  permit_params :entry_word, :word_type, :translation, :alternate_translations_raw, :alternate_spellings_raw, :display_order, :description,
-                :published?, :image, :audio, image_credit_attributes: [:attribution_text, :link], category_ids: []
+  permit_params :entry_word, :word_type, :translation, :scientific_name, :sentence, :sentence_translation, :alternate_translations_raw, :alternate_spellings_raw, :display_order, :description, :admin_only_notes,
+                :published?, :image, :audio, :call_audio, :sentence_audio, image_credit_attributes: [:attribution_text, :link], category_ids: []
 
   form(html: { multipart: true }) do |f|
     f.inputs 'Details' do
       f.input :entry_word
       f.input :word_type, as: :select, collection: Entry::WORD_TYPES
       f.input :translation
+      f.input :scientific_name
       f.input :alternate_translations_raw, as: :text, label: 'Alternate translations - One per line', placeholder: 'One per line', input_html: {rows: 3}
       f.input :alternate_spellings_raw, as: :text, label: 'Alternate spellings - One per line', placeholder: 'One per line', input_html: {rows: 3}
       f.input :description
       f.input :display_order, hint: 'optional - if not specified will be sorted alphabetically'
       f.input :published?
     end
+
+    f.inputs 'Example Sentence' do
+      f.input :sentence
+      f.input :sentence_translation
+    end 
 
     f.inputs 'Image' do
       f.input :image, as: :file, label: 'Image - Must be JPEG, PNG or GIF', hint: thumbnail_image(f.object)
@@ -42,11 +51,17 @@ ActiveAdmin.register Entry do
     end
 
     f.inputs 'Audio' do
-      f.input :audio, as: :file, label: 'Audio - Must be MP3 or M4A (AAC)', hint: audio_link(f.object)
+      f.input :audio, as: :file, label: 'Word Audio (MP3/M4A)', hint: audio_link(f.object)
+      f.input :call_audio, as: :file, label: 'Call Audio (MP3/M4A)', hint: call_audio_link(f.object)
+      f.input :sentence_audio, as: :file, label: 'Sentence Audio (MP3/M4A)', hint: sentence_audio_link(f.object)
     end
 
     f.inputs 'Select categories' do
       f.input :categories, as: :check_boxes, collection: Category.all.sort_by(&:name)
+    end
+    
+    f.inputs 'Admin notes' do
+      f.input :admin_only_notes, hint: 'optional - not intended to be shown on front end and not included in app sync'
     end
 
     f.actions
@@ -62,6 +77,17 @@ ActiveAdmin.register Entry do
     redirect_to collection_path, :notice => "Entries un-published"
   end
 
+  batch_action :add_category_to, form: ->{{category: Category.pluck(:name, :id)}} do |selection, inputs|
+    # Entry.find(selection).each { |e| e.categories << Category.find(inputs[:category]) }
+    Entry.find(selection).each { |e|  
+      if not inputs[:category].to_i.in?(e.category_ids)
+        e.categories << Category.find(inputs[:category])
+      end
+    }   
+    redirect_to collection_path, :notice => "Entries added to category"
+  end
+
+
   index do
     selectable_column
     column :entry_word do |entry|
@@ -69,6 +95,7 @@ ActiveAdmin.register Entry do
     end
     column :word_type
     column :translation
+    column :scientific_name
     column :published?
     column 'Order', :display_order
     column :image do |entry|
@@ -87,6 +114,7 @@ ActiveAdmin.register Entry do
 
   filter :categories
   filter :entry_word
+  filter :scientific_name
   filter :translation
   filter :published?, as: :select, collection: [true, false]
 end

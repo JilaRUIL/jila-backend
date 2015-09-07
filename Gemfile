@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.2'
+ruby '2.1.6'
 
 gem 'rails', '4.1.4'
 gem 'sass-rails', '~> 4.0.3'
@@ -14,7 +14,7 @@ gem 'jquery-ui-rails'
 gem "active_model_serializers"
 
 gem 'devise'
-gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'activeadmin', github: 'activeadmin'
 
 gem 'paperclip'
 gem 'aws-sdk'
@@ -32,6 +32,8 @@ gem 'dalli'
 gem 'newrelic_rpm'
 
 gem 'rspec-rails'
+
+gem 'active_admin_csv_import'
 
 group :development do
   gem 'spring'	

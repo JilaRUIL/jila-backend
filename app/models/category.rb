@@ -34,4 +34,8 @@ class Category < ActiveRecord::Base
   def audio_game_suitable?
     entries.where('audio_file_name IS NOT NULL').count > 1
   end
+
+  def self.single_category id
+    where(id: id)
+  end
 end

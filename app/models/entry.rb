@@ -32,6 +32,12 @@ class Entry < ActiveRecord::Base
   has_attached_file :audio
   validates_attachment_content_type :audio, :content_type => ["audio/mp3", "audio/x-m4a"]
 
+  has_attached_file :call_audio
+  validates_attachment_content_type :call_audio, :content_type => ["audio/mp3", "audio/x-m4a"]
+
+  has_attached_file :sentence_audio
+  validates_attachment_content_type :sentence_audio, :content_type => ["audio/mp3", "audio/x-m4a"]
+
 	def self.published?
 		where(published?: true)
 	end
@@ -64,5 +70,9 @@ class Entry < ActiveRecord::Base
   def alternate_translations_raw= values
     self.alternate_translations = []
     self.alternate_translations = values.split("\n")
+  end
+
+  def self.single_category id
+    where(:id => (Category.find_by_id(id).entry_ids))
   end
 end

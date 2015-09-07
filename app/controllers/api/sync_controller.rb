@@ -27,6 +27,15 @@ class Api::SyncController < ApplicationController
     }, root: false, serializer: SyncSerializer
   end
 
+  def single_category
+    last_sync = DateTime.parse(params[:last_sync]) if params[:last_sync]
+    render json: {
+      categories: categories_single_category_since(params[:id], last_sync),
+      entries: entries_single_category_since(params[:id], last_sync),
+      image_credits: [],
+    }, root: false, serializer: SyncSerializer
+  end
+
   private
 
   def categories_since last_sync
@@ -39,6 +48,16 @@ class Api::SyncController < ApplicationController
 
     entries = entries.since last_sync if last_sync
 
+    entries.by_display_order.alphabetically.published?
+  end
+
+  def categories_single_category_since id, last_sync
+    categories = Category.single_category id
+    last_sync ? categories.since(last_sync) : categories
+  end
+  def entries_single_category_since id, last_sync
+    entries = Entry.single_category id
+    last_sync ? entries.since(last_sync) : entries
     entries.by_display_order.alphabetically.published?
   end
 end

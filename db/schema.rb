@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140904020258) do
+ActiveRecord::Schema.define(version: 20150907144135) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20140904020258) do
     t.boolean  "audio_game_available?", default: true
   end
 
-  create_table "categories_entries", force: true do |t|
+  create_table "categories_entries", id: false, force: true do |t|
     t.integer "category_id"
     t.integer "entry_id"
   end
@@ -80,8 +80,20 @@ ActiveRecord::Schema.define(version: 20140904020258) do
     t.string   "audio_content_type"
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
-    t.text     "extras",             default: "---\n:alternate_translations: []\n"
+    t.text     "extras",                      default: "---\n:alternate_translations: []\n"
     t.integer  "display_order"
+    t.string   "sentence"
+    t.string   "sentence_translation"
+    t.string   "scientific_name"
+    t.text     "admin_only_notes"
+    t.string   "call_audio_file_name"
+    t.string   "call_audio_content_type"
+    t.integer  "call_audio_file_size"
+    t.datetime "call_audio_updated_at"
+    t.string   "sentence_audio_file_name"
+    t.string   "sentence_audio_content_type"
+    t.integer  "sentence_audio_file_size"
+    t.datetime "sentence_audio_updated_at"
   end
 
   create_table "image_credits", force: true do |t|
