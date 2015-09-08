@@ -32,7 +32,7 @@ class Api::SyncController < ApplicationController
     render json: {
       categories: categories_single_category_since(params[:id], last_sync),
       entries: entries_single_category_since(params[:id], last_sync),
-      image_credits: [],
+      image_credits: ImageCredit.with_attribution
     }, root: false, serializer: SyncSerializer
   end
 
