@@ -11,7 +11,7 @@ class MakeCommonCategory < ActiveRecord::Migration
       first_category.save
     end
 
-    new_category = Category.create id: 1, name: 'Thipa'
+    new_category = Category.create id: 1, name: 'Birds'
 
     ApiSweeper.disabled = false
   end
