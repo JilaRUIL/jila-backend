@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150907144135) do
+ActiveRecord::Schema.define(version: 20151118031333) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20150907144135) do
   create_table "entries", force: true do |t|
     t.string   "entry_word"
     t.string   "word_type"
-    t.string   "translation"
+    t.text     "translation"
     t.text     "description"
     t.boolean  "published?"
     t.datetime "created_at"
@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 20150907144135) do
     t.datetime "audio_updated_at"
     t.text     "extras",                      default: "---\n:alternate_translations: []\n"
     t.integer  "display_order"
-    t.string   "sentence"
-    t.string   "sentence_translation"
+    t.text     "sentence"
+    t.text     "sentence_translation"
     t.string   "scientific_name"
     t.text     "admin_only_notes"
     t.string   "call_audio_file_name"

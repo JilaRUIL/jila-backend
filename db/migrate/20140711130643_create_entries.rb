@@ -3,7 +3,7 @@ class CreateEntries < ActiveRecord::Migration
     create_table :entries do |t|
       t.string :entry_word
       t.string :word_type
-      t.string :translation
+      t.text :translation
       t.text :description
       t.boolean :published?
 
