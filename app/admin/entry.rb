@@ -87,14 +87,14 @@ ActiveAdmin.register Entry do
     redirect_to collection_path, :notice => "Entries added to category"
   end
 
-
   index do
     selectable_column
     column :entry_word do |entry|
       link_to entry.entry_word, edit_admin_entry_path(entry)
     end
-    column :word_type
-    column :translation
+    column :translation do |entry|
+      truncate(entry.translation, omision: "...", length: 100)
+    end
     column :scientific_name
     column :published?
     column 'Order', :display_order
