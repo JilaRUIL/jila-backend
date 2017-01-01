@@ -12,6 +12,7 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
+  # config.action_controller.asset_host = "http://localhost:3000"
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -35,11 +36,18 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  backend_url = 'http:/localhost:3000'
+  backend_url = 'http://localhost:3000'
+
+  # paperclips default is..
+  # :rails_root/public/system/:class/:attachment/:id_partition/:style/:filename
+  #
+  # this is working better for me, from
+  # http://www.bwigg.com/2009/10/paperclip-customizing-paths-and-urls/
 
   config.paperclip_defaults = {
     :storage => :filesystem,
-    :url => "#{backend_url}/system/:class/:attachment/:id_partition/:style/:class_:id.:extension",
+    :path => "public/system/:class/:attachment/:id_partition/:style/:class_:id.:extension",
+    :url => "/system/:class/:attachment/:id_partition/:style/:class_:id.:extension",
     :default_url => "#{backend_url}/images/:style/missing.png"
   }
 end
