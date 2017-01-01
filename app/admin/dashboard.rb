@@ -36,9 +36,9 @@ ActiveAdmin.register_page "Dashboard" do
             text_node "entries in the dictionary."
           end
         end
-        panel "Brought to you by" do
-          image_tag("/assets/tw_logo.png", width: "100%", style: "margin-top: 15px;")
-        end
+        # panel "Brought to you by" do
+        #   image_tag("/assets/tw_logo.png", width: "100%", style: "margin-top: 15px;")
+        # end
       end
     end
   end
