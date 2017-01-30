@@ -18,7 +18,9 @@ class Entry < ActiveRecord::Base
     "preposition",
     "conjunction",
     "interjection",
-    "phrase"
+    "phrase",
+    "prefix",
+    "suffix"
 	]
 
 	has_attached_file :image, styles: {
