@@ -40,7 +40,7 @@ ActiveAdmin.register Entry do
     f.inputs 'Example Sentence' do
       f.input :sentence
       f.input :sentence_translation
-    end 
+    end
 
     f.inputs 'Image' do
       f.input :image, as: :file, label: 'Image - Must be JPEG, PNG or GIF', hint: thumbnail_image(f.object)
@@ -59,7 +59,7 @@ ActiveAdmin.register Entry do
     f.inputs 'Select categories' do
       f.input :categories, as: :check_boxes, collection: Category.all.sort_by(&:name)
     end
-    
+
     f.inputs 'Admin notes' do
       f.input :admin_only_notes, hint: 'optional - not intended to be shown on front end and not included in app sync'
     end
@@ -79,11 +79,11 @@ ActiveAdmin.register Entry do
 
   batch_action :add_category_to, form: ->{{category: Category.pluck(:name, :id)}} do |selection, inputs|
     # Entry.find(selection).each { |e| e.categories << Category.find(inputs[:category]) }
-    Entry.find(selection).each { |e|  
+    Entry.find(selection).each { |e|
       if not inputs[:category].to_i.in?(e.category_ids)
         e.categories << Category.find(inputs[:category])
       end
-    }   
+    }
     redirect_to collection_path, :notice => "Entries added to category"
   end
 
@@ -101,8 +101,14 @@ ActiveAdmin.register Entry do
     column :image do |entry|
       thumbnail_image entry
     end
-    column :audio do |entry|
+    column 'Word Audio', :audio do |entry|
       audio_link entry
+    end
+    column :call_audio do |entry|
+      call_audio_link entry
+    end
+    column :sentence_audio do |entry|
+      sentence_audio_link entry
     end
     column :categories do |entry|
       entry.categories.map do |c|
